@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Veg Roll",
+    "price": 8.99
+  },
+  {
+    "name": "Vada Pav",
+    "price": 10.99
+  },
+  {
+    "name": "Samosa",
+    "price": 7.49
+  },
+  {
+    "name": "Chicken Fried Rice",
+    "price": 7.99
+  },
+  {
+    "name": "Panner Puff",
+    "price": 6.49
+  },
+  {
+    "name": "Kachori",
+    "price": 2.99
+  }
+]
