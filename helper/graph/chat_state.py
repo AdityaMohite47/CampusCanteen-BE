@@ -4,7 +4,7 @@ from typing import Annotated , List
 from langchain_core.messages import AIMessage , HumanMessage
 
 class ChatState(TypedDict):
-    student_id : str
+    phone_number : str
     session: str
     messages: Annotated[List[AIMessage | HumanMessage] , add_messages]
     active_intent : str

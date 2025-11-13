@@ -1,36 +1,30 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from pydantic import BaseModel
 from processor import process_message
 from models import Message
-from fastapi import FastAPI
-from pydantic import BaseModel
-import asyncio 
-from fastapi.middleware.cors import CORSMiddleware
-
-
-# Define request body
-class ChatRequest(BaseModel):
-    message: str
-
-# Define response body
-class ChatResponse(BaseModel):
-    reply: str
 
 app = FastAPI()
 
+# Allow your frontend to connect
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # during dev
-    allow_credentials=True,
+    allow_origins=["*"],  # Change to your frontend URL later
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"]
 )
 
-@app.post("/chat", response_model=ChatResponse)
-async def chat_endpoint(request: ChatRequest):
-    print("✅ Received message:", request.message)
+class ChatRequest(BaseModel):
+    message: str
+
+@app.post("/api/chat")
+async def chat_endpoint(req: ChatRequest):
+    user_message = req.message
     reply = await process_message(
         Message(
-            student_id="TEST",
-            content=request.message,
-            sent_by="student"
+            phone_number="TEST",
+            content=user_message,
+            sent_by="user"
         ))
-    return ChatResponse(reply=reply)
+    return {"response": reply}

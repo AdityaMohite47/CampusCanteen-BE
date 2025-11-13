@@ -3,7 +3,7 @@ from models import Message
 import asyncio
 
 # Build initial ChatState dict
-STUDENT_ID = input("Enter your student ID : ").strip()
+PHONE_NUMBER = input("Enter your phone number (for session tracking): ").strip()
 
 async def chat_loop():
     print("\nType your message below. Type 'exit' to quit.\n")
@@ -13,7 +13,7 @@ async def chat_loop():
             print("Exiting chat.")
             break
         msg = Message(
-            student_id=STUDENT_ID,
+            phone_number=PHONE_NUMBER,
             content=user_input,
             sent_by="student"
         )

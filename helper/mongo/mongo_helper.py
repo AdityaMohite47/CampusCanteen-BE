@@ -9,40 +9,40 @@ dotenv.load_dotenv()
 def add_message_to_mongo(message: Message):
     conn = get_mongodb_connection()
     message_collection = conn[os.getenv("MESSAGES_COLLECTION")]
-    students_collection = conn[os.getenv("STUDENTS_COLLECTION")]
+    user_collection = conn[os.getenv("USERS_COLLECTION")]
 
-    student = students_collection.find_one({"student_id": message.student_id})
+    student = user_collection.find_one({"phone_number": message.phone_number})
     if not student:
-        add_user_to_mongo(Student(student_id=message.student_id))
+        add_user_to_mongo(User(phone_number=message.phone_number))
 
     doc = message.model_dump()
     try:
         result = message_collection.insert_one(doc)
-        append_message_to_session(message.student_id, message.session_id, message)
+        append_message_to_session(message.phone_number, message.session_id, message)
         return result.inserted_id
     except PyMongoError as e:
         raise e
     
 
-def append_message_to_session(student_id: str, session_id: str, message: Message):
+def append_message_to_session(phone_number: str, session_id: str, message: Message):
     conn = get_mongodb_connection()
     session_collection = conn[os.getenv("SESSIONS_COLLECTION")]
     
     try:
-        session = session_collection.find_one({"student_id": student_id, "session_id": session_id})
+        session = session_collection.find_one({"phone_number": phone_number, "session_id": session_id})
         if session:
             session["context_history"].append(message.model_dump())
-            session_collection.update_one({"student_id": student_id, "session_id": session_id}, {"$set": {"context_history": session["context_history"]}})
+            session_collection.update_one({"phone_number": phone_number, "session_id": session_id}, {"$set": {"context_history": session["context_history"]}})
         else:
             raise ValueError("Session not found")
     except PyMongoError as e:
         raise e
     
-def add_user_to_mongo(student: Student):
+def add_user_to_mongo(user: User):
     conn = get_mongodb_connection()
-    student_collection = conn[os.getenv("STUDENTS_COLLECTION")]   
+    user_collection = conn[os.getenv("USERS_COLLECTION")]   
     try:
-        result = student_collection.insert_one(student.model_dump())
+        result = user_collection.insert_one(user.model_dump())
         return result.inserted_id
     except PyMongoError as e:
         raise e
@@ -78,22 +78,22 @@ def fetch_menu():
     except PyMongoError as e:
         raise PyMongoError(f"Failed to fetch vendors: {str(e)}")
     
-def fetch_last_n_messages(student_id: str, n: int = 10) -> List[Message]:
+def fetch_last_n_messages(phone_number: str, n: int = 10) -> List[Message]:
     conn = get_mongodb_connection()
     message_collection = conn[os.getenv("MESSAGES_COLLECTION")]
     
     try:
-        messages = message_collection.find({"student_id": student_id}).sort("created_at", -1).limit(n)
+        messages = message_collection.find({"phone_number": phone_number}).sort("created_at", -1).limit(n)
         return [Message(**msg) for msg in messages]
     except PyMongoError as e:
         raise e
 
-def get_last_message(student_id: str) -> Optional[Message]:
+def get_last_message(phone_number: str) -> Optional[Message]:
     conn = get_mongodb_connection()
     message_collection = conn[os.getenv("MESSAGES_COLLECTION")]
     
     try:
-        message = message_collection.find_one({"student_id": student_id}, sort=[("created_at", -1)])
+        message = message_collection.find_one({"phone_number": phone_number}, sort=[("created_at", -1)])
         return Message(**message) if message else None
     except PyMongoError as e:
         raise e
@@ -102,9 +102,9 @@ def update_message(message : Message):
     conn = get_mongodb_connection()
     message_collection = conn[os.getenv("MESSAGES_COLLECTION")]
     
-    student = conn[os.getenv("STUDENTS_COLLECTION")].find_one({"student_id" : message.student_id})
+    student = conn[os.getenv("USERS_COLLECTION")].find_one({"phone_number" : message.phone_number})
     if not student:
-        add_user_to_mongo(Student(student_id=message.student_id))
+        add_user_to_mongo(User(phone_number=message.phone_number))
     try:
         message_collection.update_one({"_id": message.message_id}, {"$set": message.model_dump()})
     except PyMongoError as e:

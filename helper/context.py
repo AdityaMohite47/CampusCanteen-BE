@@ -6,17 +6,17 @@ import os
 import dotenv
 dotenv.load_dotenv()
 
-def get_session_context(student_id: str, session_id: str) -> SessionContext:
+def get_session_context(phone_number: str, session_id: str) -> SessionContext:
     conn = get_mongodb_connection()
     sessions_col = conn[os.getenv("SESSIONS_COLLECTION")]
     existing_session = sessions_col.find_one({
-        "student_id": student_id,
+        "phone_number": phone_number,
         "_id": session_id
     })
 
     if existing_session:
-        existing_session["context_history"] = get_session_messages(student_id, session_id)
-        existing_session["updated_at"] = datetime.now()
+        existing_session["context_history"] = get_session_messages(phone_number, session_id)
+        existing_session["updated_at"] = datetime.now() 
         sessions_col.update_one(
             {"_id": session_id},
             {"$set": {"updated_at": existing_session["updated_at"]}}
@@ -24,7 +24,7 @@ def get_session_context(student_id: str, session_id: str) -> SessionContext:
         return SessionContext(**existing_session)
 
     new_session_context = SessionContext(
-        student_id=student_id,
+        phone_number=phone_number,
         session_id=session_id,
         context_history=[]
     )
@@ -44,11 +44,11 @@ def update_session_field(session_id: str, field: str, value: Any):
         {"$set": {field: value, "updated_at": datetime.now()}}
     )
 
-def get_session_messages(student_id: str, session_id: str) -> List[Message]:
+def get_session_messages(phone_number: str, session_id: str) -> List[Message]:
     conn = get_mongodb_connection()
     messages_col = conn[os.getenv("MESSAGES_COLLECTION")]
     docs = list(messages_col.find({
-        "student_id": student_id,
+        "phone_number": phone_number,
         "session_id": session_id
     }).sort("created_at", -1))
     return [Message(**msg) for msg in docs]
