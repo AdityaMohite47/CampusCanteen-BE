@@ -33,4 +33,8 @@ The backend is built with scalability in mind and can be extended to support mul
 ## Project Type
 
 - Scalable backend system  
-- Designed to integrate with web, mobile, and WhatsApp-based ordering platforms  
+- Designed to integrate with web, mobile, and WhatsApp-based ordering platforms
+
+## Demo
+[![Campus Canteen Demo](https://img.youtube.com/vi/900mPHrd1K8/0.jpg)](https://youtu.be/900mPHrd1K8)
+[Watch the full demo on YouTube](https://youtu.be/900mPHrd1K8)
