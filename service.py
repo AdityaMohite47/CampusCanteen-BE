@@ -6,10 +6,10 @@ from models import Message
 
 app = FastAPI()
 
-# Allow your frontend to connect
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change to your frontend URL later
+    allow_origins=["*"], 
     allow_methods=["*"],
     allow_headers=["*"]
 )

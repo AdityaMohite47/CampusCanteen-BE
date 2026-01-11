@@ -78,5 +78,3 @@ def identify_session(msg: Message) -> str:
 # for testing purposes
 # print(identify_session(Message(phone_number="1234567891", content="Hello", sent_by="user")))
 # print(type(CHAIN))
-    
-    

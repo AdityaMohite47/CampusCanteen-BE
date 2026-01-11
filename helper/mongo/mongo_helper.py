@@ -1,12 +1,11 @@
-from typing import Optional, List, Any,TypedDict
-from datetime import datetime
+from typing import Optional, List
 from pymongo.errors import PyMongoError
 from models import *
 from .mongodbconn import get_mongodb_connection
 import dotenv, os
 dotenv.load_dotenv()
 
-def add_message_to_mongo(message: Message):
+def add_message_to_mongo(message: Message): 
     conn = get_mongodb_connection()
     message_collection = conn[os.getenv("MESSAGES_COLLECTION")]
     user_collection = conn[os.getenv("USERS_COLLECTION")]
