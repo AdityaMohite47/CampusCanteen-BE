@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pydantic = "*"
+langchain = "*"
+langchain-core = "*"
+langchain-groq = "*"
+langgraph = "*"
+pymongo = "*"
+python-dotenv = "*"
+typing-extensions = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.13"

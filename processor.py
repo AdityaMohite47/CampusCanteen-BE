@@ -29,7 +29,8 @@ async def process_message(message: Message) -> str:
         state = ChatState(
             phone_number = message.phone_number,
             session = session_id,
-            messages = [HumanMessage(content=msg.content) if msg.sent_by == "user" else AIMessage(content=msg.content) for msg in session_history] + [HumanMessage(content=message.content)],
+            messages = [HumanMessage(content=msg.content) if msg.sent_by == "user" else AIMessage(content=msg.content) for msg in session_history] + 
+            [HumanMessage(content=message.content)],
         )
         
         response_state = GRAPH.invoke(state)

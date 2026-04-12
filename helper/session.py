@@ -1,7 +1,7 @@
 import uuid, json, datetime, logging
 from models import Message
 from helper.mongo.mongo_helper import fetch_last_n_messages , get_last_message
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 from helper.graph.prompts import SESSION_PROMPT
 from dotenv import load_dotenv
 load_dotenv()
@@ -13,7 +13,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-LLM = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
+LLM = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
 
 import re
 
@@ -43,14 +43,6 @@ def ask_ai_for_session(msgs: list[Message], msg: Message):
         return False
 
 def identify_session(msg: Message) -> str:
-    """
-    Identify the session for the given message.
-    If last message is under a minute ago, continue the same session.
-    Otherwise, ask the AI to determine if it's a new session or not.
-
-    Returns:
-        str: session_id to use for this message
-    """
 
     last_msg = get_last_message(msg.phone_number)
 
@@ -60,11 +52,10 @@ def identify_session(msg: Message) -> str:
 
     time_diff = (datetime.datetime.now() - last_msg.created_at).total_seconds()
     logger.info(f"Time difference between last and current message: {time_diff} seconds")
-    # Message is fresh — continue current session
+
     if time_diff < 60:
         return last_msg.session_id
 
-    # Ask AI if new session is needed
     last_10_msgs = fetch_last_n_messages(msg.phone_number)
     is_new_session = ask_ai_for_session(last_10_msgs, msg)
 
@@ -75,6 +66,6 @@ def identify_session(msg: Message) -> str:
     return last_msg.session_id if last_msg else str(uuid.uuid4())
 
 
-# for testing purposes
+# for testing
 # print(identify_session(Message(phone_number="1234567891", content="Hello", sent_by="user")))
 # print(type(CHAIN))

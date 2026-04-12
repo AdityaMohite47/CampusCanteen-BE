@@ -10,7 +10,7 @@ class User(BaseModel):
 
 class Message(BaseModel):
     phone_number: str 
-    message_type: str = "text" # text / image
+    message_type: str = "text" 
     content: str  # Text
     data: Optional[str] = None  # Optional URL to media
     message_id: str = Field(default_factory=lambda: str(uuid.uuid4()))

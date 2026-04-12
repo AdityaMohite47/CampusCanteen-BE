@@ -15,7 +15,7 @@ async def chat_loop():
         msg = Message(
             phone_number=PHONE_NUMBER,
             content=user_input,
-            sent_by="student"
+            sent_by="user"
         )
         try:
             await process_message(msg)

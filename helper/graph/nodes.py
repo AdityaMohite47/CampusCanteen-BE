@@ -47,7 +47,7 @@ def Chat(state:ChatState):
     menu = ""
     if menu_list:
         menu = "\n".join(
-            f"{item["name"]} | {item["price"]}" for item in menu_list
+            f"{item['name']} | {item['price']}" for item in menu_list
         )
     else:
         menu = "No Vendors avaliable."
@@ -84,15 +84,16 @@ def book_order(state:ChatState):
     
     if parsed_response["finalized"]:
         order_object = Order(
-            user=state["phone_number"],
+            phone_number=state["phone_number"],
             ordered_items=[
                 item for item in parsed_response["info"]["items"]
             ],
             status="Pending",
         )
         add_order_to_mongo(order_object)
-        
-    return {"messages":[AIMessage(content=parsed_response['reply_for_user'] + f"\n Token Number for Your Order is : {order_object.token}" if parsed_response['finalized'] else parsed_response['reply_for_user'])]}
+        return {"messages":[AIMessage(content=parsed_response['reply_for_user'] + f"\n Token Number for Your Order is : {order_object.token}")]}
+
+    return {"messages":[AIMessage(content=parsed_response['reply_for_user'])]}
 
 # json
 # {

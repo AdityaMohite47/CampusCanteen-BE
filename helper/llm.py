@@ -1,7 +1,6 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path="../.env")
+load_dotenv()
 
-
-LLM = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7)
+LLM = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.7)
