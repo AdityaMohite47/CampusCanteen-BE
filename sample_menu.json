@@ -1,26 +1,12 @@
 [
-  {
-    "name": "Veg Roll",
-    "price": 8.99
-  },
-  {
-    "name": "Vada Pav",
-    "price": 10.99
-  },
-  {
-    "name": "Samosa",
-    "price": 7.49
-  },
-  {
-    "name": "Chicken Fried Rice",
-    "price": 7.99
-  },
-  {
-    "name": "Panner Puff",
-    "price": 6.49
-  },
-  {
-    "name": "Kachori",
-    "price": 2.99
-  }
+  { "name": "Vada Pav", "price": 15 },
+  { "name": "Samosa", "price": 10 },
+  { "name": "Veg Roll", "price": 40 },
+  { "name": "Paneer Puff", "price": 30 },
+  { "name": "Kachori", "price": 12 },
+  { "name": "Chicken Fried Rice", "price": 70 },
+  { "name": "Veg Fried Rice", "price": 55 },
+  { "name": "Masala Maggi", "price": 35 },
+  { "name": "Bread Omelette", "price": 40 },
+  { "name": "Cold Coffee", "price": 50 }
 ]

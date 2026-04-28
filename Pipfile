@@ -12,8 +12,10 @@ langgraph = "*"
 pymongo = "*"
 python-dotenv = "*"
 typing-extensions = "*"
+fastapi = "*"
+uvicorn = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.13"
+python_version = "3.14.4"

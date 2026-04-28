@@ -2,7 +2,6 @@ from processor import process_message
 from models import Message
 import asyncio
 
-# Build initial ChatState dict
 PHONE_NUMBER = input("Enter your phone number (for session tracking): ").strip()
 
 async def chat_loop():
