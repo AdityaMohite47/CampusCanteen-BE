@@ -23,7 +23,6 @@ async def process_message(message: Message) -> str:
     try:
         session_id = identify_session(message)
         message.session_id = session_id
-        message.status = "processed"
 
         session_context = get_session_context(message.phone_number, session_id)
         history = session_context.context_history
@@ -40,6 +39,7 @@ async def process_message(message: Message) -> str:
         response_state = GRAPH.invoke(state)
         response_data = response_state["messages"][-1]
 
+        message.status = "processed"
         add_message_to_mongo(message)
 
         if response_data:
