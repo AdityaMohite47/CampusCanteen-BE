@@ -29,19 +29,12 @@ When showing the menu, use this structure:
 
 INTENT_PROMPT = """
 Classify the latest user message into one word:
-- Chat: menu, timings, greetings, canteen questions
+- MenuQuery: asking about menu items, prices, or what food is available
+- General: greetings, thanks, timings, pickup, payment, or any canteen question not about the menu
 - Book: placing or confirming a food order
 - Unknown: unrelated to canteen
 
-Reply with ONLY one word: Chat, Book, or Unknown
-"""
-
-CHAT_SUB_INTENT_PROMPT = """
-Classify the user message into one word:
-- MenuQuery: asking about menu items, prices, availability, or what food is offered
-- General: greetings, thanks, timings, pickup, payment, or any other canteen question
-
-Reply with ONLY one word: MenuQuery or General
+Reply with ONLY one word: MenuQuery, General, Book, or Unknown
 """
 
 GENERAL_CHAT_PROMPT = """

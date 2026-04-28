@@ -2,7 +2,7 @@ import random, json
 from core.graph.state import ChatState
 from langchain_core.messages import AIMessage
 from core.llm import LLM
-from core.graph.prompts import CHAT_PROMPT, GENERAL_CHAT_PROMPT, CHAT_SUB_INTENT_PROMPT, INTENT_PROMPT, BOOK_ORDER_PROMPT
+from core.graph.prompts import CHAT_PROMPT, GENERAL_CHAT_PROMPT, INTENT_PROMPT, BOOK_ORDER_PROMPT
 from core.db.crud import add_order_to_mongo, fetch_menu
 from core.graph.utils import sanitize_llm_json
 from models import Order
@@ -30,36 +30,19 @@ def identify_intent(state: ChatState):
                 "current_message": recent_msgs[-1],
             })
         ])
+        result = intent.content.strip()
+        if result not in ("MenuQuery", "General", "Book", "Unknown"):
+            result = "General"
     except Exception as e:
         print(f"ERROR IDENTIFYING INTENT: {e}")
-        return {"active_intent": "Chat"}
+        result = "General"
 
-    return {"active_intent": intent.content.strip()}
+    print(f"Intent: {result}")
+    return {"active_intent": result}
 
 
 def intent_router(state: ChatState):
-    print(f"User Intent : {state["active_intent"]}")
     return state["active_intent"]
-
-def chat_intent(state: ChatState):
-    message = state["messages"][-1]
-    try:
-        result = LLM.invoke([
-            CHAT_SUB_INTENT_PROMPT,
-            json.dumps({"current_message": message.content})
-        ])
-        sub_intent = result.content.strip()
-        if sub_intent not in ("MenuQuery", "General"):
-            sub_intent = "General"
-    except Exception as e:
-        print(f"ERROR IDENTIFYING CHAT SUB-INTENT: {e}")
-        sub_intent = "General"
-    print(f"Chat Sub-Intent: {sub_intent}")
-    return {"chat_sub_intent": sub_intent}
-
-
-def chat_sub_intent_router(state: ChatState):
-    return state["chat_sub_intent"]
 
 
 def chat_menu(state: ChatState):

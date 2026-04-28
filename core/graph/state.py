@@ -8,5 +8,4 @@ class ChatState(TypedDict):
     phone_number: str
     session: str
     messages: Annotated[List[AIMessage | HumanMessage], add_messages]
-    active_intent: str
-    chat_sub_intent: str  # "MenuQuery" | "General"
+    active_intent: str  # "MenuQuery" | "General" | "Book" | "Unknown"
